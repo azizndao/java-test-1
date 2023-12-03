@@ -54,7 +54,7 @@ public class CramerRule implements SolvingRule {
         int sign = 1;
 
         for (int i = 0; i < n; i++) {
-            double[][] minor = getMinor(matrix, 0, i);
+            double[][] minor = getMinor(matrix, i);
             determinant += sign * matrix[0][i] * calculateDeterminant(minor);
             sign *= -1;
         }
@@ -85,12 +85,12 @@ public class CramerRule implements SolvingRule {
         return variableValues;
     }
 
-    private double[][] getMinor(double[][] matrix, int row, int col) {
+    private double[][] getMinor(double[][] matrix, int col) {
         int n = matrix.length;
         double[][] minor = new double[n - 1][n - 1];
 
         for (int i = 0, p = 0; i < n; i++) {
-            if (i == row) continue;
+            if (i == 0) continue;
 
             for (int j = 0, q = 0; j < n; j++) {
                 if (j == col) {
