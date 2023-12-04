@@ -2,14 +2,14 @@ package solvers;
 
 import exceptions.NoSolutionException;
 import models.Equation;
-import models.Solutions;
+import models.Solution;
 import models.Variable;
 
 import java.util.List;
 
 public class CramerRule implements SolvingRule {
     @Override
-    public Solutions solve(List<Equation> equations) {
+    public List<Solution> solve(List<Equation> equations) {
         int numVariables = equations.get(0).variables().size();
 
         // Creer des matrices pour le système principal et chaque variable
@@ -40,7 +40,7 @@ public class CramerRule implements SolvingRule {
         // Create a list of Variable records with names and values
         var solutions = createVariableRecords(equations.get(0).variables(), variableValues);
 
-        return new Solutions(solutions);
+        return solutions;
     }
 
     private double calculateDeterminant(double[][] matrix) {
@@ -107,11 +107,11 @@ public class CramerRule implements SolvingRule {
         return minor;
     }
 
-    private List<Solutions.Solution> createVariableRecords(List<Variable> variables, List<Double> values) {
-        List<Solutions.Solution> solutionRecords = new java.util.ArrayList<>();
+    private List<Solution> createVariableRecords(List<Variable> variables, List<Double> values) {
+        List<Solution> solutionRecords = new java.util.ArrayList<>();
 
         for (int i = 0; i < variables.size(); i++) {
-            solutionRecords.add(new Solutions.Solution(variables.get(i).name(), values.get(i)));
+            solutionRecords.add(new Solution(variables.get(i).name(), values.get(i)));
         }
 
         return solutionRecords;

@@ -1,5 +1,6 @@
 import exceptions.NoSolutionException;
 import models.Equation;
+import models.Solution;
 import parsers.EquationParser;
 import solvers.CramerRule;
 import solvers.GaussPivotRule;
@@ -18,25 +19,34 @@ public class SystemSolver {
         List<Equation> equations = getEquations(numberOfVariables);
         SolvingRule solvingRule = getSolvingMethod(true);
         try {
-            System.out.println(solvingRule.solve(equations));
+            var solution = solvingRule.solve(equations);
+            System.out.println(Solution.formatSystemSolution(solution));
         } catch (NoSolutionException e) {
             System.out.println("Pas de solution");
         }
-        System.out.print("voulez-vous recommencer, tape 'q' pour quitter");
-        if (!scanner.next().equals("q")) start();
+        System.out.println("voulez-vous recommencer, tape 'q' pour quitter");
+        if (!scanner.next().equals("q")) {
+            scanner.close();
+            start();
+        } else {
+            scanner.close();
+        }
     }
 
     private SolvingRule getSolvingMethod(boolean first) {
         if (first) {
-            System.out.println("Methode: 1 - Cramer, 2 - Inversion de metrice, 3 - Pivot de Gauss");
+            System.out.println("Methode: [1] Cramer, [2] Inversion de metrice, [3] Pivot de Gauss");
         }
         System.out.print("Methode: ");
-        var scanner = new Scanner(System.in);
-        try {
+
+        try (var scanner = new Scanner(System.in)) {
             var methodId = scanner.nextInt();
-            if (methodId == 1) return new CramerRule();
-            if (methodId == 2) return new MetricInversionRule();
-            if (methodId == 3) return new GaussPivotRule();
+            if (methodId == 1)
+                return new CramerRule();
+            if (methodId == 2)
+                return new MetricInversionRule();
+            if (methodId == 3)
+                return new GaussPivotRule();
             throw new IllegalArgumentException();
         } catch (Exception e) {
             System.out.println("Methode invalide");
@@ -60,15 +70,16 @@ public class SystemSolver {
             equations.add(equation);
             i++;
         }
+        scanner.close();
         return equations;
     }
 
     private int getGetNumberOfVariables() {
-        var scanner = new Scanner(System.in);
-        try {
+        try (var scanner = new Scanner(System.in)) {
             System.out.print("Donner le nombre incunnus (2 ou 3): ");
             int numberOfVariables = scanner.nextInt();
-            if (numberOfVariables != 2 && numberOfVariables != 3) throw new IllegalArgumentException();
+            if (numberOfVariables != 2 && numberOfVariables != 3)
+                throw new IllegalArgumentException();
             return numberOfVariables;
         } catch (Exception e) {
             return getGetNumberOfVariables();

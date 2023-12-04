@@ -1,10 +1,10 @@
 package solvers;
 
 import models.Equation;
-import models.Solutions;
+import models.Solution;
 
 import java.util.List;
 
 public interface SolvingRule {
-    Solutions solve(List<Equation> equations);
+    List<Solution> solve(List<Equation> equations);
 }

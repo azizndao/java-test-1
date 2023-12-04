@@ -2,9 +2,8 @@ package models;
 
 import java.util.List;
 
-public record Solutions(List<Solution> solutions) {
+public record Solution(String name, double value) {
 
-    public record Solution(String name, double value) {
 
         @Override
         public String toString() {
@@ -12,12 +11,10 @@ public record Solutions(List<Solution> solutions) {
             if (valueStr.endsWith(".0")) valueStr = valueStr.substring(0, valueStr.length() - 2);
             return "%s = %s".formatted(name, valueStr);
         }
-    }
 
-    @Override
-    public String toString() {
-        return "Solutions = " + solutions.toString()
-                .replace("[", "{")
-                .replace("]", "}");
-    }
+        public static String formatSystemSolution(List<Solution> solitions) {
+            return "S=" + solitions.toString()
+            .replace("[", "{")
+            .replace("]", "}");
+        }
 }

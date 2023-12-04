@@ -1,14 +1,14 @@
 package solvers;
 
 import models.Equation;
-import models.Solutions;
+import models.Solution;
 import models.Variable;
 
 import java.util.List;
 
 public class MetricInversionRule implements SolvingRule {
     @Override
-    public Solutions solve(List<Equation> equations) {
+    public  List<Solution> solve(List<Equation> equations) {
         int numVariables = equations.get(0).variables().size();
 
         double[][] coefficientsMatrix = new double[equations.size()][numVariables];
@@ -28,9 +28,9 @@ public class MetricInversionRule implements SolvingRule {
 
         double[] solutionVector = multiplyMatrixVector(inverseMatrix, constants);
 
-        List<Solutions.Solution> variables = createVariableRecords(equations.get(0).variables(), solutionVector);
+        List<Solution> variables = createVariableRecords(equations.get(0).variables(), solutionVector);
 
-        return new Solutions(variables);
+        return variables;
     }
 
     public static double[][] invertMatrix(double[][] matrix) {
@@ -88,11 +88,11 @@ public class MetricInversionRule implements SolvingRule {
         return result;
     }
 
-    private List<Solutions.Solution> createVariableRecords(List<Variable> variables, double[] values) {
-        List<Solutions.Solution> variableRecords = new java.util.ArrayList<>();
+    private List<Solution> createVariableRecords(List<Variable> variables, double[] values) {
+        List<Solution> variableRecords = new java.util.ArrayList<>();
 
         for (int i = 0; i < variables.size(); i++) {
-            variableRecords.add(new Solutions.Solution(variables.get(i).name(), values[i]));
+            variableRecords.add(new Solution(variables.get(i).name(), values[i]));
         }
 
         return variableRecords;

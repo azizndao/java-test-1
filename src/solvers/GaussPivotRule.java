@@ -1,13 +1,13 @@
 package solvers;
 
 import models.Equation;
-import models.Solutions;
+import models.Solution;
 
 import java.util.List;
 
 public class GaussPivotRule implements SolvingRule {
     @Override
-    public Solutions solve(List<Equation> equations) {
+    public  List<Solution> solve(List<Equation> equations) {
         int numVariables = equations.get(0).variables().size();
 
         double[][] augmentedMatrix = new double[equations.size()][numVariables + 1];
@@ -50,11 +50,11 @@ public class GaussPivotRule implements SolvingRule {
             }
         }
 
-        List<Solutions.Solution> variables = new java.util.ArrayList<>();
+        List<Solution> variables = new java.util.ArrayList<>();
         for (int i = 0; i < equations.size(); i++) {
-            variables.add(new Solutions.Solution(equations.get(i).variables().get(i).name(), augmentedMatrix[i][numVariables]));
+            variables.add(new Solution(equations.get(i).variables().get(i).name(), augmentedMatrix[i][numVariables]));
         }
 
-        return new Solutions(variables);
+        return variables;
     }
 }
